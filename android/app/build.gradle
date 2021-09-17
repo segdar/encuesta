@@ -1,0 +1,116 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    compileSdkVersion 30
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.encuesta"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+apply plugin: 'com.android.application'
+
+// Add this line
+apply plugin: 'com.google.gms.google-services'
+
+
+dependencies {
+  // Import the Firebase BoM
+  implementation platform('com.google.firebase:firebase-bom:28.4.0')
+
+
+  // Add the dependency for the Firebase SDK for Google Analytics
+  // When using the BoM, don't specify versions in Firebase dependencies
+  implementation 'com.google.firebase:firebase-analytics'
+
+
+  // Add the dependencies for any other desired Firebase products
+  // https://firebase.google.com/docs/android/setup#available-libraries
+}
+/*final DynamicLinkParameters parameters = DynamicLinkParameters(
+  uriPrefix: 'https://abc123.app.goo.gl',
+  link: Uri.parse('https://example.com/'),
+  androidParameters: AndroidParameters(
+      packageName: 'com.example.android',
+      minimumVersion: 125,
+  ),
+  iosParameters: IosParameters(
+      bundleId: 'com.example.ios',
+      minimumVersion: '1.0.1',
+      appStoreId: '123456789',
+  ),
+  googleAnalyticsParameters: GoogleAnalyticsParameters(
+      campaign: 'example-promo',
+      medium: 'social',
+      source: 'orkut',
+  ),
+  itunesConnectAnalyticsParameters: ItunesConnectAnalyticsParameters(
+    providerToken: '123456',
+    campaignToken: 'example-promo',
+  ),
+  socialMetaTagParameters:  SocialMetaTagParameters(
+    title: 'Example of a Dynamic Link',
+    description: 'This link works whether app is installed or not!',
+  ),
+);
+
+final Uri dynamicUrl = await parameters.buildUrl();
+final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+final Uri shortUrl = shortDynamicLink.shortUrl;
+
+final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(
+  Uri.parse('https://example.page.link/?link=https://example.com/&apn=com.example.android&ibn=com.example.ios'),
+  DynamicLinkParametersOptions(ShortDynamicLinkPathLength.unguessable),
+);*/
+
+
+
